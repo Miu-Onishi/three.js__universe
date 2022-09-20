@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <style>
+      body {
+        margin: 0;
+      }
+    </style>
+    <title>three.jsのサンプル</title>
+  </head>
+  <body>
+    <div id="output"></div>
+    <script type="module">
+      //import * as THREE from "https://unpkg.com/three/build/three.module.js";
+      import Stats from "./js/stats.module.js"; //追加
+      import * as THREE from "./js/three.module.js";
+      import { TrackballControls } from "./js/TrackballControls.js";
+      import { GLTFLoader } from "./js/GLTFLoader.js"; // for loading GLTF
+      let mixer; // for GLTF animation
+      let clock = new THREE.Clock(); // for GLTF animation
+
+      /* global THREE */
+      let container, stats;
+      let camera, controls, light, scene, renderer, raycaster;
+      let mesh, snowman;
+      let snow = new Array(1000);
+      let Vsnow = new Array(1000);
+      let texture = new THREE.TextureLoader().load("images/like.png");
+      let sun, mercury, venus, earth, moon;
+      let torus = new Array(400);
+      let radius = [16000, 28000, 40000]; // 半径
+      let radian0 = 0;
+      let radian1 = 0;
+      let radian2 = 0;
+      let radian3 = 0; // ラジアン
+      let INTERSECTED;
+
+      let pointer = new THREE.Vector2(); // マウス座標管理用のベクトルを作成
+      let rradius = 100;
+      let checkFlg = 0;
+      let universeFlg = 0;
+      let torsuR = 0;
+      let obj, obj2;
+
+      init();
+      animate();
+
+      function init() {
+        // (1) シーンの作成 （変更しない）
+        scene = new THREE.Scene();
+
+        // (2) カメラの作成 （変更しない）
+        camera = new THREE.PerspectiveCamera(
+          60,
+          window.innerWidth / window.innerHeight,
+          1,
+          200000 //奥まで見える距離
+        );
+        container = document.createElement("div");
+        //document.body.appendChild(container); //わからん
+
+        camera.position.x = 0;
+        camera.position.y = 500;
+        camera.position.z = 90000;
+        //camera.lookAt(new THREE.Vector3(0, 0, 0)); //常に中央を見る
+
+        // (4) ライティング　平行光線＋環境光（変更しない）
+        light = new THREE.DirectionalLight(0xffffff);
+        light.position.set(300, 200, 200);
+        light.castShadow = true;
+        light.shadow.camera.top = 1024;
+        light.shadow.camera.bottom = -1024;
+        light.shadow.camera.left = -1024;
+        light.shadow.camera.right = 1024;
+        light.shadow.camera.near = 0;
+        light.shadow.camera.far = 1024;
+        scene.add(light);
+
+        light = new THREE.AmbientLight(0xaaaaaa);
+        scene.add(light);
+        // light = new THREE.PointLight(0xffffff, 2, 50, 1.0);
+        // scene.add(light);
+
+        // (5)表示する物体の作成
+        let geometry, material;
+
+        // GLTFを読み込むローダの読み込み
+        let gltfLoader = new GLTFLoader();
+        let gltfLoader2 = new GLTFLoader();
+        // GLTFの3DモデルのRobotの読み込み
+        gltfLoader.load("./airplane/scene.gltf", function (data) {
+          const gltf = data;
+          obj = gltf.scene;
+
+          // End GLTF animaiton
+
+          obj.scale.set(10, 10, 10);
+          earth.add(obj);
+        });
+        gltfLoader2.load("./UFO/scene.gltf", function (data) {
+          const gltf2 = data;
+          obj2 = gltf2.scene;
+          obj2.scale.set(100, 100, 100);
+          obj2.rotation.y = 300;
+          //obj.position.y = 500;
+
+          //obj2.position.z = +20000;
+          //scene.add(obj2);
+          venus.add(obj2);
+        });
+
+        // 太陽
+        geometry = new THREE.SphereGeometry(8000, 32, 32);
+        material = new THREE.MeshPhongMaterial({
+          side: THREE.DoubleSide,
+          map: new THREE.TextureLoader().load("images/sun.jpg")
+        });
+        sun = new THREE.Mesh(geometry, material);
+        sun.position.x = 0;
+        sun.position.y = 0;
+        sun.position.z = 0;
+        sun.castShadow = true;
+        sun.name = "sun1";
+        scene.add(sun);
+
+        // 水星
+        geometry = new THREE.SphereGeometry(800, 32, 32);
+        material = new THREE.MeshPhongMaterial({
+          side: THREE.DoubleSide,
+          map: new THREE.TextureLoader().load("images/mercury.jpg")
+        });
+        mercury = new THREE.Mesh(geometry, material);
+        mercury.position.y = 0;
+        mercury.castShadow = true;
+        mercury.name = "mercury1";
+        scene.add(mercury);
+        //水星の中
+        geometry = new THREE.TorusGeometry(15, 8, 16, 10);
+        material = new THREE.MeshBasicMaterial({ color: 0xe6f0fa });
+        for (let i = 0; i < 400; i++) {
+          torus[i] = new THREE.Mesh(geometry, material);
+          //torus.position.y = 200;
+          torus[i].position.x = Math.random() * 600 - 300;
+          torus[i].position.y = Math.random() * 600 - 300;
+          torus[i].position.z = Math.random() * 600 - 300;
+          //torus[i].receiveShadow = true;
+          torus[i].castShadow = true;
+          mercury.add(torus[i]);
+        }
+
+        //金星
+        geometry = new THREE.SphereGeometry(1900, 32, 32);
+        material = new THREE.MeshPhongMaterial({
+          side: THREE.DoubleSide,
+          map: new THREE.TextureLoader().load("images/venus.jpg")
+        });
+        venus = new THREE.Mesh(geometry, material);
+        venus.position.y = 0;
+        venus.castShadow = true;
+        venus.name = "venus1";
+        scene.add(venus);
+
+        // 地球
+        geometry = new THREE.SphereGeometry(2000, 32, 32);
+        material = new THREE.MeshPhongMaterial({
+          side: THREE.DoubleSide,
+          map: new THREE.TextureLoader().load("images/earth.jpg")
+          // opacity: 0.5,
+          // transparent: true
+        });
+        earth = new THREE.Mesh(geometry, material);
+        earth.position.y = 0;
+        earth.castShadow = true;
+        earth.name = "earth1";
+        scene.add(earth);
+        //地球の中
+
+        // 月
+        geometry = new THREE.SphereGeometry(500, 32, 32);
+        material = new THREE.MeshPhongMaterial({
+          side: THREE.DoubleSide,
+          map: new THREE.TextureLoader().load("images/moon.jpg")
+        });
+        moon = new THREE.Mesh(geometry, material);
+        moon.position.y = 0;
+        moon.castShadow = true;
+        earth.add(moon);
+
+        //snowman
+        // 球体（下）
+        geometry = new THREE.SphereGeometry(100, 32, 32);
+        material = new THREE.MeshPhongMaterial({});
+
+        snowman = new THREE.Mesh(geometry, material);
+        snowman.position.x = 0;
+        snowman.position.y = 100;
+        snowman.position.z = 0;
+        snowman.castShadow = true;
+        sun.add(snowman);
+        //earth.add(snowman);
+
+        // 球体（上）
+        geometry = new THREE.SphereGeometry(50, 32, 32);
+        material = new THREE.MeshPhongMaterial({
+          map: texture
+        });
+
+        mesh = new THREE.Mesh(geometry, material);
+        mesh.position.x = 0;
+        mesh.position.y = 150;
+        mesh.position.z = 0;
+        mesh.castShadow = true;
+        mesh.rotation.y = -Math.PI / 2;
+        //snowman.add(mesh);
+
+        // 雪
+        geometry = new THREE.BoxGeometry(5, 5, 5);
+        material = new THREE.MeshLambertMaterial({
+          color: 0xffffff
+          //specular: 0xcccccc,
+          //emissive: 0xff00ff,
+          //map: texture
+        });
+        for (let i = 0; i < 1000; i++) {
+          snow[i] = new THREE.Mesh(geometry, material);
+          snow[i].position.x = Math.random() * 2000 - 1000;
+          snow[i].position.y = Math.random() * 1000;
+          snow[i].position.z = Math.random() * 2000 - 1000;
+          snow[i].receiveShadow = true;
+          snow[i].castShadow = true;
+          sun.add(snow[i]);
+          earth.add(snow[i]);
+        }
+        //金星の中
+        geometry = new THREE.BoxGeometry(7, 7, 7);
+        material = new THREE.MeshLambertMaterial({
+          color: 0xff0000
+        });
+        for (let i = 0; i < 1000; i++) {
+          Vsnow[i] = new THREE.Mesh(geometry, material);
+          Vsnow[i].position.x = Math.random() * 2000 - 1000;
+          Vsnow[i].position.y = Math.random() * 1000;
+          Vsnow[i].position.z = Math.random() * 2000 - 1000;
+          Vsnow[i].receiveShadow = true;
+          Vsnow[i].castShadow = true;
+          sun.add(Vsnow[i]);
+          venus.add(Vsnow[i]);
+        }
+
+        //地面（PlaneGeometry）の生成
+        mesh = new THREE.Mesh(
+          new THREE.PlaneGeometry(1000, 1000, 1, 1),
+          new THREE.MeshLambertMaterial({
+            side: THREE.DoubleSide,
+            color: 0xffffff
+          })
+        );
+        // 影の有効化
+        mesh.receiveShadow = true;
+        mesh.rotation.x = -Math.PI / 2;
+        // シーンオブジェクトに追加
+        scene.add(mesh);
+
+        let axesHelper = new THREE.AxesHelper(1000);
+        scene.add(axesHelper);
+
+        // scene.fog = new THREE.FogExp2( 0xcccccc, 0.001 );
+
+        raycaster = new THREE.Raycaster(); //マウス位置からまっすぐに伸びる光線ベクトルを生成
+        stats = new Stats();
+        //container.appendChild(stats.dom);
+        window.addEventListener("resize", onWindowResize);
+
+        document.addEventListener("mousemove", onPointerMove);
+
+        function onWindowResize() {
+          camera.aspect = window.innerWidth / window.innerHeight;
+          camera.updateProjectionMatrix();
+
+          renderer.setSize(window.innerWidth, window.innerHeight);
+        }
+
+        function onPointerMove(event) {
+          pointer.x = (event.clientX / window.innerWidth) * 2 - 1;
+          pointer.y = -(event.clientY / window.innerHeight) * 2 + 1;
+        }
+
+        // (6)レンダリング （変更しない）
+        renderer = new THREE.WebGLRenderer({ antialias: false });
+
+        //影の有効化（レンダラー）
+        renderer.shadowMap.enabled = true;
+
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setClearColor("#222222", 1);
+
+        container = document.getElementById("output");
+        container.appendChild(renderer.domElement);
+
+        // カメラをトラックボールで動かす （変更しない）
+        controls = new TrackballControls(camera, renderer.domElement);
+        controls.addEventListener("change", render);
+        controls.rotateSpeed = 1.0;
+        controls.zoomSpeed = 1.2;
+        controls.panSpeed = 0.8;
+
+        window.addEventListener("resize", onWindowResize, false);
+      }
+
+      // ウインドウサイズを変えたときのアクション（変更しない）
+      function onWindowResize() {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        controls.handleResize();
+        render();
+      }
+
+      // アニメーションの実行（無限ループ）
+      function animate() {
+        //moon.rotation.y += 0.2;
+        requestAnimationFrame(animate);
+        controls.update();
+        //雪アニメーション
+        for (let i = 0; i < 1000; i++) {
+          snow[i].position.y--;
+          if (snow[i].position.y < 0) snow[i].position.y = 1000;
+        }
+
+        //太陽
+        sun.rotation.y += 0.002; //自転
+        //水星アニメーション
+        if (universeFlg == 0) {
+          mercury.rotation.y += 0.06; //自転
+          mercury.position.x = radius[0] * Math.cos(radian0); //公転
+          mercury.position.z = radius[0] * Math.sin(radian0);
+          //金星アニメーション
+          venus.rotation.y += 0.06; //自転
+          venus.position.x = radius[1] * Math.cos(radian1); //公転
+          venus.position.z = radius[1] * Math.sin(radian1);
+          //地球アニメーション
+          earth.rotation.y += 0.02;
+          earth.position.x = radius[2] * Math.cos(radian2);
+          earth.position.z = radius[2] * Math.sin(radian2);
+        }
+
+        //月アニメーション
+        moon.position.x = 3000 * Math.cos(radian3);
+        moon.position.z = 3000 * Math.sin(radian3);
+        moon.position.y = 3000 * Math.sin(radian3);
+        //水星の中アニメーション
+        for (let i = 0; i < 400; i++) {
+          torus[i].rotation.y += 0.006;
+        }
+        //アニメーション
+        for (let i = 0; i < 1000; i++) {
+          Vsnow[i].position.y--;
+          if (Vsnow[i].position.y < 0) Vsnow[i].position.y = 1000;
+        }
+        //金星の中アニメーション
+
+        obj2.position.x = 600 * Math.cos(radian0); //公転
+        obj2.position.z = 600 * Math.sin(radian0);
+
+        radian0 += 0.0175; //0.035; //地球に対する公転周期の比率0.2
+        radian1 += 0.0058; //0.0116; //地球に対して0.6
+        radian2 += 0.0035; //0.007; //1日
+        radian3 += 0.00012963; //0.000259; //公転周期27日
+
+        raycaster.setFromCamera(pointer, camera);
+
+        let intersects = raycaster.intersectObjects(scene.children, false); //マウスが交差
+
+        if (intersects.length > 0) {
+          //if (INTERSECTED != intersects[0].object) {
+          if (intersects[0].object.name === "mercury1") {
+            //水星に当たった時
+            if (INTERSECTED)
+              INTERSECTED.material.emissive.setHex(INTERSECTED.currentHex);
+            INTERSECTED = intersects[0].object;
+            INTERSECTED.currentHex = INTERSECTED.material.emissive.getHex();
+            universeFlg = 1;
+            checkFlg = 2;
+            mercury.rotation.y += 0.002;
+          }
+          if (intersects[0].object.name === "venus1") {
+            //金星に当たった時
+            if (INTERSECTED)
+              INTERSECTED.material.emissive.setHex(INTERSECTED.currentHex);
+            INTERSECTED = intersects[0].object;
+            INTERSECTED.currentHex = INTERSECTED.material.emissive.getHex();
+            universeFlg = 1;
+            checkFlg = 3;
+            venus.rotation.y += 0.002;
+          }
+          if (intersects[0].object.name === "earth1") {
+            //地球に当たった時
+            if (INTERSECTED)
+              INTERSECTED.material.emissive.setHex(INTERSECTED.currentHex);
+            INTERSECTED = intersects[0].object;
+            INTERSECTED.currentHex = INTERSECTED.material.emissive.getHex();
+            universeFlg = 1;
+            checkFlg = 4;
+            earth.rotation.y += 0.002;
+          }
+        } else {
+          if (INTERSECTED)
+            INTERSECTED.material.emissive.setHex(INTERSECTED.currentHex);
+
+          INTERSECTED = null;
+        }
+        if (checkFlg == 2) {
+          camera.position.x = mercury.position.x;
+          camera.position.y = mercury.position.y + 200;
+          camera.position.z = mercury.position.z - 750;
+          camera.lookAt(mercury.position);
+        }
+        if (checkFlg == 3) {
+          camera.position.x = venus.position.x;
+          camera.position.y = venus.position.y + 300;
+          camera.position.z = venus.position.z - 1600;
+          camera.lookAt(venus.position);
+        }
+        if (checkFlg == 4) {
+          camera.position.x = earth.position.x;
+          camera.position.y = earth.position.y + 600;
+          camera.position.z = earth.position.z - 1600;
+          camera.lookAt(earth.position);
+        }
+
+        render();
+      }
+
+      function render() {
+        renderer.render(scene, camera);
+      }
+    </script>
+  </body>
+</html>
+
+<!-- dekita -->

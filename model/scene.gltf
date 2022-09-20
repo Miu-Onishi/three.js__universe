@@ -1,0 +1,418 @@
+{
+  "accessors": [
+    {
+      "bufferView": 2,
+      "componentType": 5126,
+      "count": 12398,
+      "max": [
+        51.4989013671875,
+        322.8559875488281,
+        11.046899795532227
+      ],
+      "min": [
+        -57.33330154418945,
+        -576.2974853515625,
+        6.046800136566162
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 2,
+      "byteOffset": 148776,
+      "componentType": 5126,
+      "count": 12398,
+      "max": [
+        1.0,
+        0.9999898672103882,
+        1.0
+      ],
+      "min": [
+        -1.0,
+        -1.0,
+        -1.0
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 1,
+      "componentType": 5126,
+      "count": 12398,
+      "max": [
+        2.559499979019165,
+        2.560699939727783
+      ],
+      "min": [
+        -1.559999942779541,
+        -1.551900029182434
+      ],
+      "type": "VEC2"
+    },
+    {
+      "bufferView": 0,
+      "componentType": 5125,
+      "count": 67866,
+      "type": "SCALAR"
+    },
+    {
+      "bufferView": 2,
+      "byteOffset": 297552,
+      "componentType": 5126,
+      "count": 40964,
+      "max": [
+        51.31909942626953,
+        322.7001953125,
+        16.990299224853516
+      ],
+      "min": [
+        -15.704299926757813,
+        134.72970581054688,
+        0.10339999943971634
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 2,
+      "byteOffset": 789120,
+      "componentType": 5126,
+      "count": 40964,
+      "max": [
+        0.9995316863059998,
+        0.9999964237213135,
+        1.0
+      ],
+      "min": [
+        -0.9999973773956299,
+        -0.9999549388885498,
+        -1.0
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 99184,
+      "componentType": 5126,
+      "count": 40964,
+      "max": [
+        1.5484999418258667,
+        0.8830000162124634
+      ],
+      "min": [
+        -0.5248000025749207,
+        0.12680000066757202
+      ],
+      "type": "VEC2"
+    },
+    {
+      "bufferView": 0,
+      "byteOffset": 271464,
+      "componentType": 5125,
+      "count": 245760,
+      "type": "SCALAR"
+    },
+    {
+      "bufferView": 2,
+      "byteOffset": 1280688,
+      "componentType": 5126,
+      "count": 5992,
+      "max": [
+        24.947500228881836,
+        269.1455078125,
+        16.98740005493164
+      ],
+      "min": [
+        10.84220027923584,
+        191.5677032470703,
+        0.1062999963760376
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 2,
+      "byteOffset": 1352592,
+      "componentType": 5126,
+      "count": 5992,
+      "max": [
+        0.999998927116394,
+        1.0,
+        1.0
+      ],
+      "min": [
+        -0.999998927116394,
+        -1.0,
+        -1.0
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 426896,
+      "componentType": 5126,
+      "count": 5992,
+      "max": [
+        1.4345999956130981,
+        0.6923999786376953
+      ],
+      "min": [
+        -0.43459999561309814,
+        0.3075999915599823
+      ],
+      "type": "VEC2"
+    },
+    {
+      "bufferView": 0,
+      "byteOffset": 1254504,
+      "componentType": 5125,
+      "count": 35904,
+      "type": "SCALAR"
+    }
+  ],
+  "asset": {
+    "extras": {
+      "author": "leeeck (https://sketchfab.com/leeeck)",
+      "license": "CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)",
+      "source": "https://sketchfab.com/3d-models/zombie-cap-sabre-a014560014c345c3abf529685bf767a3",
+      "title": "Zombie Cap Sabre"
+    },
+    "generator": "Sketchfab-13.58.0",
+    "version": "2.0"
+  },
+  "bufferViews": [
+    {
+      "buffer": 0,
+      "byteLength": 1398120,
+      "name": "floatBufferViews",
+      "target": 34963
+    },
+    {
+      "buffer": 0,
+      "byteLength": 474832,
+      "byteOffset": 1398120,
+      "byteStride": 8,
+      "name": "floatBufferViews",
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 1424496,
+      "byteOffset": 1872952,
+      "byteStride": 12,
+      "name": "floatBufferViews",
+      "target": 34962
+    }
+  ],
+  "buffers": [
+    {
+      "byteLength": 3297448,
+      "uri": "scene.bin"
+    }
+  ],
+  "images": [
+    {
+      "uri": "textures/blade_baseColor.jpeg"
+    },
+    {
+      "uri": "textures/blade_metallicRoughness.png"
+    },
+    {
+      "uri": "textures/handle_baseColor.jpeg"
+    },
+    {
+      "uri": "textures/handle_metallicRoughness.png"
+    },
+    {
+      "uri": "textures/pins_baseColor.jpeg"
+    },
+    {
+      "uri": "textures/pins_metallicRoughness.png"
+    }
+  ],
+  "materials": [
+    {
+      "doubleSided": true,
+      "name": "blade",
+      "pbrMetallicRoughness": {
+        "baseColorFactor": [
+          0.5547892720306513,
+          0.5547892720306513,
+          0.5547892720306513,
+          1.0
+        ],
+        "baseColorTexture": {
+          "index": 0
+        },
+        "metallicRoughnessTexture": {
+          "index": 1
+        },
+        "roughnessFactor": 0.6160919540229886
+      }
+    },
+    {
+      "doubleSided": true,
+      "name": "handle",
+      "pbrMetallicRoughness": {
+        "baseColorFactor": [
+          0.542528735632184,
+          0.542528735632184,
+          0.542528735632184,
+          1.0
+        ],
+        "baseColorTexture": {
+          "index": 2
+        },
+        "metallicFactor": 0.0,
+        "metallicRoughnessTexture": {
+          "index": 3
+        },
+        "roughnessFactor": 0.6528735632183909
+      }
+    },
+    {
+      "doubleSided": true,
+      "name": "pins",
+      "pbrMetallicRoughness": {
+        "baseColorTexture": {
+          "index": 4
+        },
+        "metallicRoughnessTexture": {
+          "index": 5
+        }
+      }
+    }
+  ],
+  "meshes": [
+    {
+      "name": "Object_0",
+      "primitives": [
+        {
+          "attributes": {
+            "NORMAL": 1,
+            "POSITION": 0,
+            "TEXCOORD_0": 2
+          },
+          "indices": 3,
+          "material": 0,
+          "mode": 4
+        }
+      ]
+    },
+    {
+      "name": "Object_1",
+      "primitives": [
+        {
+          "attributes": {
+            "NORMAL": 5,
+            "POSITION": 4,
+            "TEXCOORD_0": 6
+          },
+          "indices": 7,
+          "material": 1,
+          "mode": 4
+        }
+      ]
+    },
+    {
+      "name": "Object_2",
+      "primitives": [
+        {
+          "attributes": {
+            "NORMAL": 9,
+            "POSITION": 8,
+            "TEXCOORD_0": 10
+          },
+          "indices": 11,
+          "material": 2,
+          "mode": 4
+        }
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "children": [
+        1
+      ],
+      "matrix": [
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        2.220446049250313e-16,
+        -1.0,
+        0.0,
+        0.0,
+        1.0,
+        2.220446049250313e-16,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "name": "Sketchfab_model"
+    },
+    {
+      "children": [
+        2,
+        3,
+        4
+      ],
+      "name": "zombie_cap_sabre.obj.cleaner.materialmerger.gles"
+    },
+    {
+      "mesh": 0,
+      "name": "Object_2"
+    },
+    {
+      "mesh": 1,
+      "name": "Object_3"
+    },
+    {
+      "mesh": 2,
+      "name": "Object_4"
+    }
+  ],
+  "samplers": [
+    {
+      "magFilter": 9729,
+      "minFilter": 9987,
+      "wrapS": 10497,
+      "wrapT": 10497
+    }
+  ],
+  "scene": 0,
+  "scenes": [
+    {
+      "name": "Sketchfab_Scene",
+      "nodes": [
+        0
+      ]
+    }
+  ],
+  "textures": [
+    {
+      "sampler": 0,
+      "source": 0
+    },
+    {
+      "sampler": 0,
+      "source": 1
+    },
+    {
+      "sampler": 0,
+      "source": 2
+    },
+    {
+      "sampler": 0,
+      "source": 3
+    },
+    {
+      "sampler": 0,
+      "source": 4
+    },
+    {
+      "sampler": 0,
+      "source": 5
+    }
+  ]
+}
